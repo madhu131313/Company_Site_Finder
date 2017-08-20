@@ -40,6 +40,6 @@ def crawler(coName):
 		print domain
 		print title
 		print score
-	except IndexError:
+	except (IndexError, AttributeError) as e:
 		pass
         return linkScores

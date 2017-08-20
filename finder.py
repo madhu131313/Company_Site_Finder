@@ -1,14 +1,5 @@
 from crawlers import google, angel, linkedin, bloomberg
 
-coName = raw_input('Enter a Company Name: ')
-
-
-blDomains = bloomberg.crawler(coName)	
-ggDomains = google.crawler(coName)
-#lnDomains = linkedin.crawler(coName) #Login Redirection issue
-alDomains = angel.crawler(coName)
-
-
 def domain_filter(blDomains, alDomains, ggDomains): 
     for blDomain in blDomains: #Bloomberg
         if blDomains[blDomain] > 0.5:
@@ -24,5 +15,13 @@ def domain_filter(blDomains, alDomains, ggDomains):
             return
     print "Couldn't find the company website"
     
+
+coName = raw_input('Enter a Company Name: ')
+
+blDomains = bloomberg.crawler(coName)	
+ggDomains = google.crawler(coName)
+#lnDomains = linkedin.crawler(coName) #Login Redirection issue
+alDomains = angel.crawler(coName)
+
 domain_filter(blDomains, alDomains, ggDomains)  
                 

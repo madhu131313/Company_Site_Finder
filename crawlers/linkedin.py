@@ -20,21 +20,24 @@ def crawler(coName):
 	result = soup.find_all('div',{'class':'g'},limit=1)
 	#print result
 	linkScores = {}
-	if len(result) > 0:
-			resultUrl = result[0].find('cite').text
-			#print resultUrl
-			driver.get(str(resultUrl))
-			print driver.current_url
-			driver.save_screenshot('link.png')
-			print driver.page_source
-			lnSoup = BeautifulSoup(driver.page_source,"html.parser")
-			#print lnSoup
-			title = lnSoup.find("h1", {"class":"name"}).text
-			print title
-			domain = lnSoup.find("li",{"class":"website"})
-			#print domain
-			domain= domain.find("a").text.split("//")[-1].split("/")[0]
-			score = round(similar(title, coName),2)
-			linkScores[domain] = score
-			print domain
+	try:
+                if len(result) > 0:
+                                resultUrl = result[0].find('cite').text
+                                #print resultUrl
+                                driver.get(str(resultUrl))
+                                print driver.current_url
+                                driver.save_screenshot('link.png')
+                                print driver.page_source
+                                lnSoup = BeautifulSoup(driver.page_source,"html.parser")
+                                #print lnSoup
+                                title = lnSoup.find("h1", {"class":"name"}).text
+                                print title
+                                domain = lnSoup.find("li",{"class":"website"})
+                                #print domain
+                                domain= domain.find("a").text.split("//")[-1].split("/")[0]
+                                score = round(similar(title, coName),2)
+                                linkScores[domain] = score
+                                #print domain
+	except AttributeError:
+                pass
         return linkScores

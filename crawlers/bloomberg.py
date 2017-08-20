@@ -19,17 +19,20 @@ def crawler(coName):
 	results = soup.find_all('div',{'class':'g'},limit=2)
 	linkScores = {}
 	for result in results:
-	    resultUrl = "http://google.com" + result.find("h3", {'class':'r'}).find('a')['href']
-	    #print resultUrl
-	    driver.get(str(resultUrl))
-	    #print driver.current_url
-	    #driver.save_screenshot('link.png')
-	    #print driver.page_source
-	    blSoup = BeautifulSoup(driver.page_source,"html.parser")
-	    title = blSoup.find("div", {"id":"columnLeft"}).find('h1').find('span').text
-	    domain = blSoup.find("div", {"class":"detailsDataContainerRt"}).find("a", {"class":"link_sb"}).text
-	    score = round(similar(title, coName),2)
-	    linkScores[domain] = score
+                try:
+                    resultUrl = "http://google.com" + result.find("h3", {'class':'r'}).find('a')['href']
+                    #print resultUrl
+                    driver.get(str(resultUrl))
+                    #print driver.current_url
+                    #driver.save_screenshot('link.png')
+                    #print driver.page_source
+                    blSoup = BeautifulSoup(driver.page_source,"html.parser")
+                    title = blSoup.find("div", {"id":"columnLeft"}).find('h1').find('span').text
+                    domain = blSoup.find("div", {"class":"detailsDataContainerRt"}).find("a", {"class":"link_sb"}).text
+                    score = round(similar(title, coName),2)
+                    linkScores[domain] = score
+                except AttributeError:
+                        pass
 	return linkScores
 	
 	

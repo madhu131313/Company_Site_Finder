@@ -14,38 +14,22 @@ def crawler(coName):
 	driver = webdriver.PhantomJS(data['PHANTOMJS_PATH'])
 	url = "https://www.google.co.in/search?q="+coName+"+site:https://www.bloomberg.com/research/stocks/private/snapshot.asp"
 	driver.get(url)
-	driver.save_screenshot('bloom1.png')
+	#driver.save_screenshot('bloom1.png')
 	soup = BeautifulSoup(driver.page_source,"html.parser")
 	results = soup.find_all('div',{'class':'g'},limit=2)
 	linkScores = {}
-        for result in results:
-            resultUrl = result.find('cite').text
-            #print resultUrl
+	for result in results:
+	    resultUrl = "http://google.com" + result.find("h3", {'class':'r'}).find('a')['href']
+	    #print resultUrl
 	    driver.get(str(resultUrl))
-	    print driver.current_url
-	    driver.save_screenshot('link.png')
+	    #print driver.current_url
+	    #driver.save_screenshot('link.png')
 	    #print driver.page_source
 	    blSoup = BeautifulSoup(driver.page_source,"html.parser")
-	    domain = blSoup.find("a", {"class":"link_sb"})['href']
-	    print domain
-           
-"""            
-	if len(results) > 0:
-                        resultUrl = result[0].find('cite').text
-			#print resultUrl
-			driver.get(str(resultUrl))
-			print driver.current_url
-			driver.save_screenshot('link.png')
-			print driver.page_source
-			lnSoup = BeautifulSoup(driver.page_source,"html.parser")
-			#print lnSoup
-			title = lnSoup.find("h1", {"class":"name"}).text
-			print title
-			domain = lnSoup.find("li",{"class":"website"})
-			#print domain
-			domain= domain.find("a").text.split("//")[-1].split("/")[0]
-			score = round(similar(title, coName),2)
-			linkScores[domain] = score
-			print domain
-        return linkScores
-"""
+	    title = blSoup.find("div", {"id":"columnLeft"}).find('h1').find('span').text
+	    domain = blSoup.find("div", {"class":"detailsDataContainerRt"}).find("a", {"class":"link_sb"}).text
+	    score = round(similar(title, coName),2)
+	    linkScores[domain] = score
+	return linkScores
+	
+	

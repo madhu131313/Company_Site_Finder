@@ -36,12 +36,10 @@ def crawler(coName):
                 #extracts domain from a sitename. ex: bbc from forums.bbc.co.uk
                 mainDomain = tldextract.extract(domain).domain
                 #Filtering out Fb, linkedin, wikipedia, glassdoor, google
-                print mainDomain
-                if mainDomain not in coName and mainDomain in data['Google_exlude']:
+                if mainDomain not in coName and mainDomain in data['Google_exclude']:
                         continue                
                 if mainDomain in coName or coName in mainDomain or similar(mainDomain, coName) > 0.6:
                         score = 1
                          
 		linkScores[domain] = score
-		print domain + " " + str(score)
-        
+        return linkScores

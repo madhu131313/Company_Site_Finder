@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import json
 from difflib import SequenceMatcher
+import signal
 
 with open('config.json') as json_data_file:
     data = json.load(json_data_file)
@@ -37,9 +38,11 @@ def crawler(coName):
 		domain = agSoup.find("a",{"class":"company_url"}).text
 		score = round(similar(title, coName),2)
 		linkScores[domain] = score
-		print domain
-		print title
-		print score
+		#print domain
+		#print title
+		#print score
 	except (IndexError, AttributeError) as e:
 		pass
+	driver.service.process.send_signal(signal.SIGTERM)
+        driver.quit()
         return linkScores

@@ -2,6 +2,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import json
 from difflib import SequenceMatcher
+import signal
 
 with open('config.json') as json_data_file:
     data = json.load(json_data_file)
@@ -40,4 +41,6 @@ def crawler(coName):
                                 #print domain
 	except AttributeError:
                 pass
+        driver.service.process.send_signal(signal.SIGTERM)
+        driver.quit()
         return linkScores

@@ -2,7 +2,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 from difflib import SequenceMatcher
 import tldextract;
-
+import signal 
 import json
 
 with open('config.json') as json_data_file:
@@ -29,7 +29,7 @@ def crawler(coName):
                         #print title
                         domain = result.find('cite').text.split("//")[-1].split("/")[0]
                 except AttributeError:
-                        pass
+                        continue
                 #Filtering out results from News 
                 if " " in domain or "." not in domain:
                         continue
@@ -38,8 +38,9 @@ def crawler(coName):
                 #Filtering out Fb, linkedin, wikipedia, glassdoor, google
                 if mainDomain not in coName and mainDomain in data['Google_exclude']:
                         continue                
-                if mainDomain in coName or coName in mainDomain or similar(mainDomain, coName) > 0.6:
-                        score = 1
-                         
+                if mainDomain in coName or coName.replace(' ', '').lower() in mainDomain or similar(mainDomain, coName) > 0.5:
+                        score = 1                         
 		linkScores[domain] = score
+	driver.service.process.send_signal(signal.SIGTERM)
+	driver.quit()
         return linkScores

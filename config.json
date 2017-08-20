@@ -1,3 +1,4 @@
 {
-	"PHANTOMJS_PATH" : "../phantomjs"
+	"PHANTOMJS_PATH" : "../phantomjs",
+	"Google_exclude" : "google|linkedin|wikipedia|glassdoor"
 }

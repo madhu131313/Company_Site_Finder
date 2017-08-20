@@ -12,7 +12,7 @@ dcap["phantomjs.page.settings.userAgent"] = (
 	"(KHTML, like Gecko) Chrome/15.0.87"
 ) #AngelList gives 404 error on headless PhantomJS
 
-def Crawler(coName):
+def crawler(coName):
 	driver = webdriver.PhantomJS(data['PHANTOMJS_PATH'], desired_capabilities=dcap)
 	try:
 		url= "https://angel.co/search?page=1&q=" + coName +"&type=companies"

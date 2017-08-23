@@ -1,27 +1,35 @@
 from crawlers import google, angel, linkedin, bloomberg
+from driver import driver
 
-def domain_filter(blDomains, alDomains, ggDomains): 
-    for blDomain in blDomains: #Bloomberg
-        if blDomains[blDomain] > 0.5:
-            print "Company Site is " + blDomain
-            return
-    for alDomain in alDomains: #AngelList
-        if alDomains[alDomain] > 0.6:
-             print "Company Site is " + alDomain
-             return
-    for ggDomain in ggDomains: #Google
-        if ggDomains[ggDomain] > 0.5:
-            print "Company Site is " + ggDomain
-            return
-    print "Couldn't find the company website"
+def domain_filter(bl_domains, al_domains, gg_domains): 
+    for bl_domain in bl_domains: #Bloomberg
+        if bl_domains[bl_domain] > 0.5:
+            return bl_domain
+    for al_domain in al_domains: #AngelList
+        if al_domains[al_domain] > 0.6:
+             return al_domain             
+    for gg_domain in gg_domains: #Google
+        if gg_domains[gg_domain] > 0.5:
+            return gg_domain
+    return None
     
 
-coName = raw_input('Enter a Company Name: ')
+if __name__ == "__main__":
+    
+    co_name = raw_input('Enter a Company Name: ')
+    webdriver = driver()
+    
+    bl_domains = bloomberg.crawler(co_name, webdriver)	
+    gg_domains = google.crawler(co_name, webdriver)
+    #ln_domains = linkedin.crawler(co_name) #Login Redirection issue
+    al_domains = angel.crawler(co_name, webdriver)
 
-blDomains = bloomberg.crawler(coName)	
-ggDomains = google.crawler(coName)
-#lnDomains = linkedin.crawler(coName) #Login Redirection issue
-alDomains = angel.crawler(coName)
+    domain = domain_filter(bl_domains, al_domains, gg_domains)
 
-domain_filter(blDomains, alDomains, ggDomains)  
+    if domain:
+        print "Company website is " + domain
+    else:
+        print "Couldn't find the company website"
+
+    webdriver.quit()
                 

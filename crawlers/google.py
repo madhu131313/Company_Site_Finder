@@ -1,22 +1,12 @@
-from selenium import webdriver
 from bs4 import BeautifulSoup
-from difflib import SequenceMatcher
 import tldextract;
-import signal 
-import json
+from utils import similar, get_config
 
-with open('config.json') as json_data_file:
-    data = json.load(json_data_file)
-
-# Ratcliff/Obershelp Algo for Similarity Score`
-def similar(a, b):
-	return SequenceMatcher(None, a, b).ratio()
-
-def crawler(coName):
-	driver = webdriver.PhantomJS(data['PHANTOMJS_PATH'])
+def crawler(coName, driver):
+        google_exclude = get_config()['Google_exclude']
 	url = "https://www.google.co.in/search?q="+ coName 
 	driver.get(url)
-	driver.save_screenshot('link.png')
+	#driver.save_screenshot('link.png')
 	soup = BeautifulSoup(driver.page_source,"html.parser")
 	results = soup.find_all('div',{'class':'g'}, limit=3)
 	linkScores = {}
@@ -36,11 +26,9 @@ def crawler(coName):
                 #extracts domain from a sitename. ex: bbc from forums.bbc.co.uk
                 mainDomain = tldextract.extract(domain).domain
                 #Filtering out Fb, linkedin, wikipedia, glassdoor, google
-                if mainDomain not in coName and mainDomain in data['Google_exclude']:
+                if mainDomain not in coName and mainDomain in google_exclude:
                         continue                
                 if mainDomain in coName or coName.replace(' ', '').lower() in mainDomain or similar(mainDomain, coName) > 0.5:
                         score = 1                         
 		linkScores[domain] = score
-	driver.service.process.send_signal(signal.SIGTERM)
-	driver.quit()
         return linkScores

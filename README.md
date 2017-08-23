@@ -3,7 +3,7 @@
 
 * Work on a new virutual environment and install the requirements
 
-    ```pip install -r requirements```
+    ```pip install -r requirements.txt```
 
 *  Download the [PhantomJS 2.1.1](http://phantomjs.org/download.html) and setup the path in config.json
 
